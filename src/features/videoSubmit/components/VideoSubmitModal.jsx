@@ -48,7 +48,7 @@ const VideoSubmitModal = ({
       setSelectedCharacter(null);
       setEmail("");
 
-      navigate("/submit_success", { state: { email, selectedCharacter } });
+      navigate("/submit-success", { state: { email, selectedCharacter } });
     } catch (err) {
       setIsLoading(false);
       setError(err.response?.data?.message || err.message);

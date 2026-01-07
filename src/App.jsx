@@ -11,8 +11,8 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/video_editor" element={<VideoEditor />} />
-        <Route path="/submit_success" element={<SubmitSuccess />} />
+        <Route path="/video-editor" element={<VideoEditor />} />
+        <Route path="/submit-success" element={<SubmitSuccess />} />
       </Routes>
     </BrowserRouter>
   );
