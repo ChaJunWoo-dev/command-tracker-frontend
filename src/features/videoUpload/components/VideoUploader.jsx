@@ -111,7 +111,7 @@ const VideoUploader = ({ onUploadSuccess, onError }) => {
                 className="mt-2"
                 disabled={isUploading}
               >
-                영상 편집
+                업로드
               </Button>
             )}
           </div>

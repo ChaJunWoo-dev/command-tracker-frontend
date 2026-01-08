@@ -2,8 +2,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import MainPage from "@/pages/MainPage";
-import VideoEditor from "@/pages/VideoEditor";
-
+import VideoEditPage from "@/pages/VideoEditPage";
 import SubmitSuccess from "./pages/SubmitSuccess";
 
 const App = () => {
@@ -11,7 +10,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/video-editor" element={<VideoEditor />} />
+        <Route path="/video-editor" element={<VideoEditPage />} />
         <Route path="/submit-success" element={<SubmitSuccess />} />
       </Routes>
     </BrowserRouter>

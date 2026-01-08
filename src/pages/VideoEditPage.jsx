@@ -13,29 +13,37 @@ import LoadingModal from "@/shared/components/LoadingModal";
 const VideoEditor = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { videoSrc, videoId } = location.state || {};
+  const videoWrapperRef = useRef(null);
+  const { videoFile } = location.state || {};
+  const [videoSrc, setVideoSrc] = useState();
+  const [playerWidth, setPlayerWidth] = useState(0);
+  const [step, setStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   const {
     trim,
     duration,
-    playing,
-    playerRef,
     error,
     isModalOpen,
     setIsModalOpen,
     setError,
-    handlePlay,
-    handlePause,
-    handleDuration,
     handleTrimChange,
-    handleProgress,
     handleEdit,
   } = useVideoEditor();
 
-  const videoWrapperRef = useRef(null);
-  const [playerWidth, setPlayerWidth] = useState(0);
-  const [step, setStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (videoFile) {
+      const url = URL.createObjectURL(videoFile);
+      setVideoSrc(url);
+      setIsLoading(false);
+
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    } else {
+      setError("영상을 불러올 수 없습니다. 다시 시도해주세요.");
+    }
+  }, []);
 
   useEffect(() => {
     if (!videoWrapperRef.current) {
@@ -51,12 +59,6 @@ const VideoEditor = () => {
     return () => obs.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!videoSrc || !videoId) {
-      setError("영상을 불러올 수 없습니다. 다시 시도해주세요.");
-    }
-  }, [videoSrc, videoId]);
-
   const closeModal = () => {
     setStep(1);
     setIsModalOpen(false);
@@ -70,19 +72,11 @@ const VideoEditor = () => {
 
   return (
     <>
-      {videoSrc && videoId && (
+      {videoSrc && (
         <div className="w-full flex flex-col items-center">
           <div className="space-y-6">
             <div ref={videoWrapperRef} className="w-fit mx-auto">
-              <VideoPlayer
-                ref={playerRef}
-                url={videoSrc}
-                playing={playing}
-                onDuration={handleDuration}
-                onProgress={handleProgress}
-                onPlay={handlePlay}
-                onPause={handlePause}
-              />
+              <VideoPlayer url={videoSrc} />
             </div>
             <TrimSlider
               trim={trim}
@@ -96,7 +90,6 @@ const VideoEditor = () => {
           </div>
           {isModalOpen && !error && (
             <VideoSubmitModal
-              videoId={videoId}
               trim={trim}
               closeModal={closeModal}
               setError={setError}
