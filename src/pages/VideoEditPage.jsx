@@ -19,34 +19,34 @@ const VideoEditor = () => {
   const [playerWidth, setPlayerWidth] = useState(0);
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     trim,
     duration,
-    error,
-    isModalOpen,
-    setIsModalOpen,
-    setError,
+    playerRef,
+    handleDuration,
     handleTrimChange,
-    handleEdit,
+    validateTrim,
   } = useVideoEditor();
 
   useEffect(() => {
     if (videoFile) {
       const url = URL.createObjectURL(videoFile);
       setVideoSrc(url);
-      setIsLoading(false);
 
       return () => {
         URL.revokeObjectURL(url);
       };
     } else {
       setError("영상을 불러올 수 없습니다. 다시 시도해주세요.");
+      setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    if (!videoWrapperRef.current) {
+    if (!videoWrapperRef.current || !videoSrc) {
       return () => {};
     }
 
@@ -57,7 +57,16 @@ const VideoEditor = () => {
     obs.observe(videoWrapperRef.current);
 
     return () => obs.disconnect();
-  }, []);
+  }, [videoSrc]);
+
+  const handleEdit = () => {
+    try {
+      validateTrim();
+      setIsModalOpen(true);
+    } catch (err) {
+      setError(err.message || "편집 요청 실패");
+    }
+  };
 
   const closeModal = () => {
     setStep(1);
@@ -76,16 +85,22 @@ const VideoEditor = () => {
         <div className="w-full flex flex-col items-center">
           <div className="space-y-6">
             <div ref={videoWrapperRef} className="w-fit mx-auto">
-              <VideoPlayer url={videoSrc} />
+              <VideoPlayer
+                ref={playerRef}
+                url={videoSrc}
+                onDuration={handleDuration}
+              />
             </div>
-            <TrimSlider
-              trim={trim}
-              duration={duration}
-              videoSrc={videoSrc}
-              onChange={handleTrimChange}
-              width={playerWidth}
-              setIsLoading={setIsLoading}
-            />
+            {playerWidth > 0 && duration > 0 && (
+              <TrimSlider
+                trim={trim}
+                duration={duration}
+                videoSrc={videoSrc}
+                onChange={handleTrimChange}
+                width={playerWidth}
+                onLoadComplete={() => setIsLoading(false)}
+              />
+            )}
             <Button onClick={handleEdit}>편집 요청</Button>
           </div>
           {isModalOpen && !error && (
