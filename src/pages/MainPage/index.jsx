@@ -3,11 +3,11 @@ import { useState } from "react";
 import { LuFilm, LuCircleCheck, LuUpload } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
-import CharacterGrid from "@/features/character/characterGrid";
-import StepCard from "@/features/userGuide/components/StepCard";
-import VideoUploader from "@/features/videoUpload/components/VideoUploader";
-import ErrorModal from "@/shared/components/ErrorModal";
-import characters from "@/shared/data/characters";
+import CharacterGrid from "@/common/character/characterGrid";
+import StepCard from "./components/StepCard";
+import VideoUploader from "./components/VideoUploader";
+import ErrorModal from "@/common/ErrorModal";
+import characters from "@/data/characters";
 
 const MainPage = () => {
   const [error, setError] = useState(null);

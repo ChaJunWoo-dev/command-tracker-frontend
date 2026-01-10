@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
-import TrimSlider from "@/features/videoEditor/components/TrimSlider";
-import VideoPlayer from "@/features/videoEditor/components/VideoPlayer";
-import useVideoEditor from "@/features/videoEditor/hooks/useVideoEditor";
-import Button from "@/shared/components/Button";
-import ErrorModal from "@/shared/components/ErrorModal";
-import LoadingModal from "@/shared/components/LoadingModal";
+import TrimSlider from "./components/TrimSlider";
+import VideoPlayer from "./components/VideoPlayer";
+import useVideoEdit from "./hooks/useVideoEdit";
+import Button from "@/common/Button";
+import ErrorModal from "@/common/ErrorModal";
+import LoadingModal from "@/common/LoadingModal";
 
-const VideoEditor = () => {
+const VideoEditPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const videoWrapperRef = useRef(null);
@@ -26,7 +26,7 @@ const VideoEditor = () => {
     handleDuration,
     handleTrimChange,
     setTrim,
-  } = useVideoEditor();
+  } = useVideoEdit();
 
   useEffect(() => {
     if (!videoFile) {
@@ -122,4 +122,4 @@ const VideoEditor = () => {
   );
 };
 
-export default VideoEditor;
+export default VideoEditPage;

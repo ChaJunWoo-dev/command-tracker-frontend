@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
-import Button from "@/shared/components/Button";
+import Button from "@/common/Button";
 
 const SubmitSuccess = () => {
   const { state } = useLocation();

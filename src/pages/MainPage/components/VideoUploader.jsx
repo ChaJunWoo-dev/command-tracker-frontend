@@ -1,8 +1,8 @@
 import { useState, useRef } from "react";
 import { LuUpload } from "react-icons/lu";
 
-import Button from "@/shared/components/Button";
-import LoadingModal from "@/shared/components/LoadingModal";
+import Button from "@/common/Button";
+import LoadingModal from "@/common/LoadingModal";
 
 const VideoUploader = ({ onUploadSuccess, onError }) => {
   const [selectedFile, setSelectedFile] = useState(null);

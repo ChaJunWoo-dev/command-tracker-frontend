@@ -4,7 +4,7 @@ const roundToSliderStep = (seconds) => {
   return Math.round(seconds * 100) / 100;
 };
 
-const useVideoEditor = () => {
+const useVideoEdit = () => {
   const [trim, setTrim] = useState([0, 0]);
   const [duration, setDuration] = useState(0);
   const playerRef = useRef(null);
@@ -45,4 +45,4 @@ const useVideoEditor = () => {
   };
 };
 
-export default useVideoEditor;
+export default useVideoEdit;
