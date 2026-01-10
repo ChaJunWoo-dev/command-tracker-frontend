@@ -8,20 +8,26 @@ import EmailInput from "./components/EmailInput";
 import PositionSelection from "./components/PositionSelection";
 import Button from "@/common/Button";
 import ErrorModal from "@/common/ErrorModal";
+import useVideoEditStore from "@/store/videoEditStore";
 
 const CharacterSelectionPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { videoFile, trim } = location.state || {};
+  const { videoFile } = location.state || {};
 
-  const [selectedPosition, setSelectedPosition] = useState(null);
-  const [selectedCharacter, setSelectedCharacter] = useState(null);
-  const [email, setEmail] = useState("");
+  const trim = useVideoEditStore((state) => state.trim);
+  const selectedCharacter = useVideoEditStore((state) => state.character);
+  const selectedPosition = useVideoEditStore((state) => state.position);
+  const email = useVideoEditStore((state) => state.email);
+  const setCharacter = useVideoEditStore((state) => state.setCharacter);
+  const setPosition = useVideoEditStore((state) => state.setPosition);
+  const setEmail = useVideoEditStore((state) => state.setEmail);
+
   const [error, setError] = useState(null);
   const [openSections, setOpenSections] = useState({
-    Position: true,
-    character: false,
-    email: false,
+    Position: !selectedPosition,
+    character: selectedPosition && !selectedCharacter,
+    email: selectedPosition && selectedCharacter,
   });
 
   const formatTime = (seconds) => {
@@ -31,12 +37,12 @@ const CharacterSelectionPage = () => {
   };
 
   const handlePositionSelect = (Position) => {
-    setSelectedPosition(Position);
+    setPosition(Position);
     setOpenSections({ Position: false, character: true, email: false });
   };
 
   const handleCharacterSelect = (character) => {
-    setSelectedCharacter(character);
+    setCharacter(character);
     setOpenSections({ Position: false, character: false, email: true });
   };
 
@@ -81,9 +87,10 @@ const CharacterSelectionPage = () => {
         setError("서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
       } else {
         const serverMessage = err.response?.data?.message;
-        const defaultMessage = err.response.status >= 500
-          ? "서버에서 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-          : "요청 처리 중 오류가 발생했습니다.";
+        const defaultMessage =
+          err.response.status >= 500
+            ? "서버에서 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+            : "요청 처리 중 오류가 발생했습니다.";
         setError(serverMessage || defaultMessage);
       }
     }
@@ -157,7 +164,7 @@ const CharacterSelectionPage = () => {
             <div className="px-6 py-6 bg-white flex gap-4">
               <Button
                 onClick={() =>
-                  navigate("/video-edit", { state: { videoFile, trim } })
+                  navigate("/video-edit", { state: { videoFile } })
                 }
               >
                 다시 편집하기

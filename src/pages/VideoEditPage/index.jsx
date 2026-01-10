@@ -4,29 +4,57 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import TrimSlider from "./components/TrimSlider";
 import VideoPlayer from "./components/VideoPlayer";
-import useVideoEdit from "./hooks/useVideoEdit";
 import Button from "@/common/Button";
 import ErrorModal from "@/common/ErrorModal";
 import LoadingModal from "@/common/LoadingModal";
+import useVideoEditStore from "@/store/videoEditStore";
 
 const VideoEditPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const videoWrapperRef = useRef(null);
-  const { videoFile, trim: initialTrim } = location.state || {};
+  const { videoFile } = location.state || {};
   const [videoSrc, setVideoSrc] = useState();
   const [playerWidth, setPlayerWidth] = useState(0);
   const [isLoading, setIsLoading] = useState(!!videoFile);
   const [error, setError] = useState(null);
 
-  const {
-    trim,
-    duration,
-    playerRef,
-    handleDuration,
-    handleTrimChange,
-    setTrim,
-  } = useVideoEdit();
+  const trim = useVideoEditStore((state) => state.trim);
+  const setTrim = useVideoEditStore((state) => state.setTrim);
+  const [duration, setDuration] = useState(0);
+  const playerRef = useRef(null);
+
+  const roundToSliderStep = (seconds) => {
+    return Math.round(seconds * 100) / 100;
+  };
+
+  const handleDuration = (videoDuration) => {
+    const roundedDuration = roundToSliderStep(videoDuration);
+    setDuration(roundedDuration);
+    if (!trim) {
+      setTrim([0, roundedDuration]);
+    }
+  };
+
+  const handleTrimChange = (newTrim) => {
+    const [newStart, newEnd] = newTrim;
+    const [prevStart, prevEnd] = trim || [0, 0];
+
+    const roundedTrim = [
+      roundToSliderStep(newStart),
+      roundToSliderStep(newEnd),
+    ];
+
+    setTrim(roundedTrim);
+
+    if (playerRef.current) {
+      if (newStart !== prevStart) {
+        playerRef.current.currentTime = roundedTrim[0];
+      } else if (newEnd !== prevEnd) {
+        playerRef.current.currentTime = roundedTrim[1];
+      }
+    }
+  };
 
   useEffect(() => {
     if (!videoFile) {
@@ -41,11 +69,6 @@ const VideoEditPage = () => {
     };
   }, [videoFile]);
 
-  useEffect(() => {
-    if (initialTrim && duration > 0) {
-      setTrim(initialTrim);
-    }
-  }, [initialTrim, duration, setTrim]);
 
   useEffect(() => {
     if (!videoWrapperRef.current || !videoSrc) {
@@ -66,10 +89,10 @@ const VideoEditPage = () => {
   const handleEdit = () => {
     try {
       navigate("/character-selection", {
-        state: { videoFile, trim },
+        state: { videoFile },
       });
     } catch (err) {
-      setError(err.message || "편집 요청 실패");
+      setError("편집에 실패했습니다.");
     }
   };
 
@@ -100,7 +123,7 @@ const VideoEditPage = () => {
                 onDuration={handleDuration}
               />
             </div>
-            {playerWidth > 0 && duration > 0 && (
+            {playerWidth > 0 && duration > 0 && trim && (
               <TrimSlider
                 trim={trim}
                 duration={duration}

@@ -1,10 +1,17 @@
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import Button from "@/common/Button";
+import useVideoEditStore from "@/store/videoEditStore";
 
 const SubmitSuccess = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const reset = useVideoEditStore((state) => state.reset);
+
+  useEffect(() => {
+    reset();
+  }, [reset]);
 
   return (
     <>
