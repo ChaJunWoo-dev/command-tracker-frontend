@@ -7,7 +7,7 @@ import CharacterGrid from "@/features/character/characterGrid";
 import StepCard from "@/features/userGuide/components/StepCard";
 import VideoUploader from "@/features/videoUpload/components/VideoUploader";
 import ErrorModal from "@/shared/components/ErrorModal";
-import champions from "@/shared/data/champions";
+import characters from "@/shared/data/characters";
 
 const MainPage = () => {
   const [error, setError] = useState(null);
@@ -71,11 +71,11 @@ const MainPage = () => {
         </div>
 
         <section className="w-full max-w-3xl mt-20">
-          <h2 className="text-xl font-semibold mb-2">지원 캐릭터</h2>
+          <h2 className="text-xl font-semibold mb-2">SF6 캐릭터</h2>
           <p className="text-gray-600 text-sm mb-4">
             현재 분석 가능한 캐릭터 목록입니다.
           </p>
-          <CharacterGrid list={champions} />
+          <CharacterGrid list={characters} />
         </section>
       </section>
     </div>

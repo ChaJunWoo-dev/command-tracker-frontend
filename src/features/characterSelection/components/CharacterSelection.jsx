@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-import champions from "@/shared/data/champions";
+import characters from "@/shared/data/characters";
 
 const CharacterSelection = ({
   selectedCharacter,
@@ -47,7 +47,7 @@ const CharacterSelection = ({
       >
         <div className="px-6 py-6 bg-gray-50">
           <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
-            {champions.map(({ name, src, isSupported }) => (
+            {characters.map(({ name, src, isSupported }) => (
               <button
                 key={name}
                 type="button"
