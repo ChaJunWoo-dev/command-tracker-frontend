@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import TrimSlider from "@/features/videoEditor/components/TrimSlider";
 import VideoPlayer from "@/features/videoEditor/components/VideoPlayer";
 import useVideoEditor from "@/features/videoEditor/hooks/useVideoEditor";
-import VideoSubmitModal from "@/features/videoSubmit/components/VideoSubmitModal";
 import Button from "@/shared/components/Button";
 import ErrorModal from "@/shared/components/ErrorModal";
 import LoadingModal from "@/shared/components/LoadingModal";
@@ -14,13 +13,11 @@ const VideoEditor = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const videoWrapperRef = useRef(null);
-  const { videoFile } = location.state || {};
+  const { videoFile, trim: initialTrim } = location.state || {};
   const [videoSrc, setVideoSrc] = useState();
   const [playerWidth, setPlayerWidth] = useState(0);
-  const [step, setStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!!videoFile);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     trim,
@@ -28,56 +25,68 @@ const VideoEditor = () => {
     playerRef,
     handleDuration,
     handleTrimChange,
-    validateTrim,
+    setTrim,
   } = useVideoEditor();
 
   useEffect(() => {
-    if (videoFile) {
-      const url = URL.createObjectURL(videoFile);
-      setVideoSrc(url);
-
-      return () => {
-        URL.revokeObjectURL(url);
-      };
-    } else {
-      setError("영상을 불러올 수 없습니다. 다시 시도해주세요.");
-      setIsLoading(false);
+    if (!videoFile) {
+      return;
     }
-  }, []);
+
+    const url = URL.createObjectURL(videoFile);
+    setVideoSrc(url);
+
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [videoFile]);
+
+  useEffect(() => {
+    if (initialTrim && duration > 0) {
+      setTrim(initialTrim);
+    }
+  }, [initialTrim, duration, setTrim]);
 
   useEffect(() => {
     if (!videoWrapperRef.current || !videoSrc) {
-      return () => {};
+      return;
     }
 
-    const obs = new ResizeObserver(([entry]) => {
-      return setPlayerWidth(entry.contentRect.width);
-    });
+    const measureWidth = () => {
+      if (videoWrapperRef.current) {
+        setPlayerWidth(videoWrapperRef.current.offsetWidth);
+      }
+    };
 
-    obs.observe(videoWrapperRef.current);
+    const rafId = requestAnimationFrame(measureWidth);
 
-    return () => obs.disconnect();
+    return () => cancelAnimationFrame(rafId);
   }, [videoSrc]);
 
   const handleEdit = () => {
     try {
-      validateTrim();
-      setIsModalOpen(true);
+      navigate("/character-selection", {
+        state: { videoFile, trim },
+      });
     } catch (err) {
       setError(err.message || "편집 요청 실패");
     }
   };
 
-  const closeModal = () => {
-    setStep(1);
-    setIsModalOpen(false);
-  };
-
   const closeError = () => {
     setError(null);
-
-    if (!videoSrc) navigate("/");
   };
+
+  if (!videoFile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-lg text-gray-600 mb-4">비디오 파일이 없습니다.</p>
+          <Button onClick={() => navigate("/")}>홈으로 돌아가기</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -101,17 +110,8 @@ const VideoEditor = () => {
                 onLoadComplete={() => setIsLoading(false)}
               />
             )}
-            <Button onClick={handleEdit}>편집 요청</Button>
+            <Button onClick={handleEdit}>다음</Button>
           </div>
-          {isModalOpen && !error && (
-            <VideoSubmitModal
-              trim={trim}
-              closeModal={closeModal}
-              setError={setError}
-              step={step}
-              setStep={setStep}
-            />
-          )}
         </div>
       )}
       {isLoading && <LoadingModal />}

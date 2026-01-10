@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import { LuLoader, LuCircleCheck, LuUpload } from "react-icons/lu";
+import { LuFilm, LuCircleCheck, LuUpload } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
-import CharacterGrid from "@/features/Character/CharacterGrid";
+import CharacterGrid from "@/features/character/characterGrid";
 import StepCard from "@/features/userGuide/components/StepCard";
 import VideoUploader from "@/features/videoUpload/components/VideoUploader";
 import ErrorModal from "@/shared/components/ErrorModal";
@@ -14,7 +14,7 @@ const MainPage = () => {
   const navigate = useNavigate();
 
   const handleUploadSuccess = (data) => {
-    navigate("/video-editor", {
+    navigate("/video-edit", {
       state: {
         videoFile: data.file,
       },
@@ -30,8 +30,11 @@ const MainPage = () => {
       <div className="mb-6">
         <img src="/imgs/logo.png" alt="Command Tracker Logo" className="h-32" />
       </div>
-      <p className="text-gray-700 text-lg mb-10">
-        캐릭터의 동작을 분석하고, 커맨드 입력을 추적합니다.
+
+      <p className="text-gray-700 text-center text-lg md:text-xl mb-10 max-w-xl leading-relaxed">
+        SF6 영상 플레이 중{" "}
+        <span className="font-semibold text-indigo-600">커맨드 입력</span>을
+        <br className="hidden sm:block" /> 한눈에 확인하고 분석할 수 있습니다.
       </p>
 
       <VideoUploader
@@ -52,25 +55,26 @@ const MainPage = () => {
         <div className="grid gap-4 sm:grid-cols-3">
           <StepCard
             icon={<LuUpload className="h-10 w-10 text-indigo-500" />}
-            title="1. 비디오 업로드"
-            desc="분석할 비디오 파일을 선택하고 업로드하세요."
+            title="1. 영상 업로드"
+            desc="분석할 영상 파일을 선택하고 업로드하세요."
           />
           <StepCard
-            icon={
-              <LuLoader className="h-10 w-10 text-indigo-500 animate-spin" />
-            }
+            icon={<LuFilm className="h-10 w-10 text-indigo-500" />}
             title="2. 분석 요청"
-            desc="원하는 길이만큼 영상을 편집하고 제출해주세요."
+            desc="분석할 구간을 설정하고 제출하세요."
           />
           <StepCard
             icon={<LuCircleCheck className="h-10 w-10 text-indigo-500" />}
             title="3. 결과 확인"
-            desc="커맨드 해독 결과를 메일로 확인할 수 있습니다."
+            desc="커맨드 해독 결과를 이메일로 받아볼 수 있습니다."
           />
         </div>
 
         <section className="w-full max-w-3xl mt-20">
-          <h2 className="text-xl font-semibold mb-6">챔피언 목록</h2>
+          <h2 className="text-xl font-semibold mb-2">지원 캐릭터</h2>
+          <p className="text-gray-600 text-sm mb-4">
+            현재 분석 가능한 캐릭터 목록입니다.
+          </p>
           <CharacterGrid list={champions} />
         </section>
       </section>
