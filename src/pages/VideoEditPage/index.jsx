@@ -16,7 +16,7 @@ const VideoEditPage = () => {
   const { videoFile } = location.state || {};
   const [videoSrc, setVideoSrc] = useState();
   const [playerWidth, setPlayerWidth] = useState(0);
-  const [isLoading, setIsLoading] = useState(!!videoFile);
+  const [isLoading, setIsLoading] = useState(videoFile);
   const [error, setError] = useState(null);
 
   const trim = useVideoEditStore((state) => state.trim);
@@ -31,7 +31,8 @@ const VideoEditPage = () => {
   const handleDuration = (videoDuration) => {
     const roundedDuration = roundToSliderStep(videoDuration);
     setDuration(roundedDuration);
-    if (!trim) {
+
+    if (!trim || trim[1] > roundedDuration) {
       setTrim([0, roundedDuration]);
     }
   };
@@ -64,11 +65,19 @@ const VideoEditPage = () => {
     const url = URL.createObjectURL(videoFile);
     setVideoSrc(url);
 
-    return () => {
-      URL.revokeObjectURL(url);
-    };
+    return () => URL.revokeObjectURL(url);
   }, [videoFile]);
 
+  useEffect(() => {
+    if (!isLoading) return;
+
+    const timer = setTimeout(() => {
+      setError("영상 로딩 실패: 파일이 손상되었거나 지원되지 않는 형식입니다.");
+      setIsLoading(false);
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, [isLoading]);
 
   useEffect(() => {
     if (!videoWrapperRef.current || !videoSrc) {
@@ -88,6 +97,14 @@ const VideoEditPage = () => {
 
   const handleEdit = () => {
     try {
+      const MAX_TRIM_MINUTES = 10;
+      const [start, end] = trim;
+      const currentTrimMinutes = (end - start) / 60;
+      if (currentTrimMinutes > MAX_TRIM_MINUTES) {
+        setError("영상 길이는 최대 30분까지 지원합니다.");
+        return;
+      }
+
       navigate("/character-selection", {
         state: { videoFile },
       });
@@ -98,6 +115,7 @@ const VideoEditPage = () => {
 
   const closeError = () => {
     setError(null);
+    navigate("/");
   };
 
   if (!videoFile) {
@@ -118,7 +136,7 @@ const VideoEditPage = () => {
           <div className="space-y-6">
             <div ref={videoWrapperRef} className="w-fit mx-auto">
               <VideoPlayer
-                ref={playerRef}
+                videoRef={playerRef}
                 url={videoSrc}
                 onDuration={handleDuration}
               />

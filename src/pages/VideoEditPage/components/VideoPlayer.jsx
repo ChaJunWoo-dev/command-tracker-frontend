@@ -1,8 +1,6 @@
-import { forwardRef } from "react";
-
 import PropTypes from "prop-types";
 
-const VideoPlayer = forwardRef(({ url, onDuration }, ref) => {
+const VideoPlayer = ({ url, onDuration, videoRef }) => {
   const handleLoadedMetadata = (e) => {
     if (onDuration) {
       onDuration(e.target.duration);
@@ -11,20 +9,22 @@ const VideoPlayer = forwardRef(({ url, onDuration }, ref) => {
 
   return (
     <video
-      ref={ref}
+      ref={videoRef}
       src={url}
       controls
       onLoadedMetadata={handleLoadedMetadata}
       className="max-w-full w-[1080px] h-auto"
     />
   );
-});
-
-VideoPlayer.displayName = "VideoPlayer";
+};
 
 VideoPlayer.propTypes = {
   url: PropTypes.string.isRequired,
   onDuration: PropTypes.func,
+  videoRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
 };
 
 export default VideoPlayer;

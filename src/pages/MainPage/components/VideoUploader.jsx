@@ -4,6 +4,8 @@ import { LuUpload } from "react-icons/lu";
 import Button from "@/common/Button";
 import LoadingModal from "@/common/LoadingModal";
 
+const MAX_SIZE = 500 * 1024 * 1024;
+
 const VideoUploader = ({ onUploadSuccess, onError }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -15,6 +17,12 @@ const VideoUploader = ({ onUploadSuccess, onError }) => {
       onError("비디오 파일만 업로드 가능합니다.");
       return false;
     }
+
+    if (file.size > MAX_SIZE) {
+      onError("영상 파일이 너무 큽니다. 최대 500MB까지 업로드 가능합니다.");
+      return false;
+    }
+
     return true;
   };
 
@@ -51,13 +59,21 @@ const VideoUploader = ({ onUploadSuccess, onError }) => {
     }
   };
 
-  const handleFileUpload = () => {
+  const handleFileUpload = async () => {
     if (!selectedFile) {
       onError("파일을 선택해주세요.");
       return;
     }
 
-    onUploadSuccess({ file: selectedFile });
+    try {
+    setIsUploading(true);
+
+    await onUploadSuccess({ file: selectedFile });
+  } catch (err) {
+    onError("업로드에 실패했습니다.");
+  } finally {
+    setIsUploading(false);
+  }
   };
 
   return (
@@ -95,6 +111,9 @@ const VideoUploader = ({ onUploadSuccess, onError }) => {
               </p>
               <p className="text-sm text-gray-500">
                 지원 형식: MP4, AVI, MOV, MKV 등
+              </p>
+              <p className="text-sm text-gray-500">
+                크기: 최대 500MB
               </p>
             </div>
 
