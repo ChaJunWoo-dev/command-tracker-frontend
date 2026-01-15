@@ -87,7 +87,7 @@ const VideoUploader = ({ onUploadSuccess, onError }) => {
           onDrop={handleDrop}
           className={`
             relative border-2 border-dashed rounded-lg p-8 transition-colors
-            ${isDragging ? "border-indigo-500 bg-indigo-50" : "border-gray-300 bg-gray-50"}
+            ${isDragging ? "border-indigo-500 bg-indigo-900/30" : "border-gray-600 bg-gray-800"}
           `}
         >
           <input
@@ -104,15 +104,15 @@ const VideoUploader = ({ onUploadSuccess, onError }) => {
             />
 
             <div className="text-center">
-              <p className="text-lg font-medium text-gray-700 mb-1">
+              <p className="text-lg font-medium text-gray-200 mb-1">
                 {selectedFile
                   ? selectedFile.name
                   : "비디오 파일을 드래그하거나 클릭하세요"}
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-400">
                 지원 형식: MP4, AVI, MOV, MKV 등
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-400">
                 크기: 최대 500MB
               </p>
             </div>

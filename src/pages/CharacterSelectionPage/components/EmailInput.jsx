@@ -15,10 +15,10 @@ const EmailInput = ({ email, onEmailChange, isOpen, onToggle }) => {
         value={email}
         onChange={(e) => onEmailChange(e.target.value)}
         placeholder="example@email.com"
-        className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
       />
-      <p className="mt-2 text-sm text-gray-500">
-        분석 완료 시 위 이메일로 결과를 보내드립니다.
+      <p className="mt-2 text-sm text-gray-400">
+        분석이 끝나면 위 이메일로 결과를 보내드립니다.
       </p>
     </AccordionSection>
   );

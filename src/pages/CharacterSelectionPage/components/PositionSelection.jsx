@@ -13,7 +13,7 @@ const PositionSelection = ({
 
   const getButtonClass = (position) => `
     ${baseButtonClass}
-    ${selectedPosition === position ? "bg-indigo-500 text-white font-bold" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}
+    ${selectedPosition === position ? "bg-indigo-500 text-white font-bold" : "bg-gray-700 text-gray-300 hover:bg-gray-600"}
   `;
 
   return (

@@ -27,7 +27,7 @@ const SubmitSuccess = () => {
           </h1>
           <p className="text-xl text-white font-medium">
             분석이 완료되면
-            <span className="text-white font-bold">{state.email}</span>에서
+            <span className="text-white font-bold">{state.email}</span>로
             결과물을 보내드릴게요
           </p>
           <Button onClick={() => navigate("/")}>홈으로</Button>

@@ -29,7 +29,7 @@ const CharacterGrid = ({
                     ? "cursor-pointer hover:scale-105"
                     : "opacity-50 grayscale cursor-not-allowed"
                 }`
-              : `text-gray-700 ${isSupported ? "" : "opacity-50 grayscale"}`
+              : `text-gray-300 ${isSupported ? "" : "opacity-50 grayscale"}`
           }`}
         >
           <img

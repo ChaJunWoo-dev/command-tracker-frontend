@@ -31,9 +31,9 @@ const MainPage = () => {
         <img src="/imgs/logo.png" alt="Command Tracker Logo" className="h-32" />
       </div>
 
-      <p className="text-gray-700 text-center text-lg md:text-xl mb-10 max-w-xl leading-relaxed">
+      <p className="text-gray-300 text-center text-lg md:text-xl mb-10 max-w-xl leading-relaxed">
         SF6 영상 플레이 중{" "}
-        <span className="font-semibold text-indigo-600">커맨드 입력</span>을
+        <span className="font-semibold text-indigo-400">커맨드 입력</span>을
         <br className="hidden sm:block" /> 한눈에 확인하고 분석할 수 있습니다.
       </p>
 
@@ -51,7 +51,7 @@ const MainPage = () => {
       )}
 
       <section className="w-full max-w-3xl mt-16">
-        <h2 className="text-xl font-semibold mb-6">사용 방법</h2>
+        <h2 className="text-xl font-semibold mb-6 text-white">사용 방법</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <StepCard
             icon={<LuUpload className="h-10 w-10 text-indigo-500" />}
@@ -71,8 +71,8 @@ const MainPage = () => {
         </div>
 
         <section className="w-full max-w-3xl mt-20">
-          <h2 className="text-xl font-semibold mb-2">SF6 캐릭터</h2>
-          <p className="text-gray-600 text-sm mb-4">
+          <h2 className="text-xl font-semibold mb-2 text-white">SF6 캐릭터</h2>
+          <p className="text-gray-400 text-sm mb-4">
             현재 분석 가능한 캐릭터 목록입니다.
           </p>
           <CharacterGrid list={characters} />

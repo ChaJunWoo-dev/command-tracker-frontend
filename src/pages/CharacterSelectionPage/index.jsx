@@ -120,17 +120,17 @@ const CharacterSelectionPage = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="px-6 py-8 border-b border-gray-200">
-              <h1 className="text-3xl font-bold text-gray-900">캐릭터 선택</h1>
-              <p className="mt-2 text-gray-600">
+          <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden">
+            <div className="px-6 py-8 border-b border-gray-700">
+              <h1 className="text-3xl font-bold text-white">캐릭터 선택</h1>
+              <p className="mt-2 text-gray-300">
                 분석할 캐릭터 정보를 선택해주세요
               </p>
               {trim && (
-                <div className="mt-3 inline-block px-4 py-2 bg-blue-50 border border-blue-200 rounded-md">
-                  <p className="text-sm font-medium text-blue-900">
+                <div className="mt-3 inline-block px-4 py-2 bg-indigo-900/50 border border-indigo-700 rounded-md">
+                  <p className="text-sm font-medium text-indigo-200">
                     편집 구간:{" "}
                     <span className="font-bold">
                       {formatTime(trim[0])} ~ {formatTime(trim[1])}
@@ -161,7 +161,7 @@ const CharacterSelectionPage = () => {
               onToggle={() => toggleSection("email")}
             />
 
-            <div className="px-6 py-6 bg-white flex gap-4">
+            <div className="px-6 py-6 bg-gray-800 flex gap-4">
               <Button
                 onClick={() =>
                   navigate("/video-edit", { state: { videoFile } })

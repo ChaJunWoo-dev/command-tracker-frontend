@@ -2,11 +2,11 @@ import PropTypes from "prop-types";
 
 const AccordionSection = ({ title, selectedValue, isOpen, onToggle, children }) => {
   return (
-    <div className="border-b border-gray-200">
+    <div className="border-b border-gray-700">
       <button
         type="button"
         onClick={onToggle}
-        className="w-full px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition-colors"
+        className="w-full px-6 py-4 flex justify-between items-center hover:bg-gray-700 transition-colors"
       >
         <div className="flex items-center gap-3">
           <span className="text-lg font-semibold">{title}</span>
@@ -36,7 +36,7 @@ const AccordionSection = ({ title, selectedValue, isOpen, onToggle, children }) 
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-6 py-6 bg-gray-50">{children}</div>
+        <div className="px-6 py-6 bg-gray-900">{children}</div>
       </div>
     </div>
   );

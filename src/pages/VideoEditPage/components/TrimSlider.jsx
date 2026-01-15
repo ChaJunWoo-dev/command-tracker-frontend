@@ -174,7 +174,7 @@ const TrimSlider = ({
         />
       </div>
 
-      <div className="flex justify-between mt-2 text-xs text-gray-600">
+      <div className="flex justify-between mt-2 text-xs text-gray-300">
         <span>{formatTime(trim[0])}</span>
         <span>{formatTime(trim[1])}</span>
       </div>
