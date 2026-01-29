@@ -8,8 +8,7 @@
     "build": "vite build",
     "lint": "eslint \"./**/*.{js,jsx}\"",
     "fix": "eslint \"./**/*.{js,jsx}\" --fix",
-    "preview": "vite preview",
-    "prepare": "husky install"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
@@ -41,7 +40,6 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-storybook": "^9.0.3",
     "globals": "^16.0.0",
-    "husky": "^9.1.7",
     "lint-staged": "^16.1.0",
     "postcss": "^8.5.4",
     "prettier": "^3.5.3",

@@ -8,6 +8,7 @@ import EmailInput from "./components/EmailInput";
 import PositionSelection from "./components/PositionSelection";
 import Button from "@/common/Button";
 import ErrorModal from "@/common/ErrorModal";
+import LoadingModal from "@/common/LoadingModal";
 import useVideoEditStore from "@/store/videoEditStore";
 
 const CharacterSelectionPage = () => {
@@ -24,6 +25,7 @@ const CharacterSelectionPage = () => {
   const setEmail = useVideoEditStore((state) => state.setEmail);
 
   const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [openSections, setOpenSections] = useState({
     Position: !selectedPosition,
     character: selectedPosition && !selectedCharacter,
@@ -61,20 +63,21 @@ const CharacterSelectionPage = () => {
         throw new Error("비디오 파일이 없습니다.");
       }
 
-      const response = await axios.post("/api/edit-video/prepare", {
+      setIsSubmitting(true);
+
+      const response = await axios.post("/api/video/prepare", {
         trimStart: trim[0],
         trimEnd: trim[1],
         position: selectedPosition,
         character: selectedCharacter,
         email: email,
       });
-
       const { uploadToken } = response.data;
 
       const formData = new FormData();
       formData.append("video", videoFile);
 
-      await axios.post(`/api/edit-video/upload`, formData, {
+      await axios.post(`/api/video/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${uploadToken}`,
@@ -93,6 +96,8 @@ const CharacterSelectionPage = () => {
             : "요청 처리 중 오류가 발생했습니다.";
         setError(serverMessage || defaultMessage);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -183,6 +188,8 @@ const CharacterSelectionPage = () => {
       {error && (
         <ErrorModal onClose={closeError} onClick={closeError} message={error} />
       )}
+
+      {isSubmitting && <LoadingModal />}
     </>
   );
 };
