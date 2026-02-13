@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { LuUpload } from "react-icons/lu";
 
 import Button from "@/common/Button";
-import LoadingModal from "@/common/LoadingModal";
+import LoadingOverlay from "@/common/LoadingOverlay";
 
 const MAX_SIZE = 500 * 1024 * 1024;
 
@@ -66,19 +66,19 @@ const VideoUploader = ({ onUploadSuccess, onError }) => {
     }
 
     try {
-    setIsUploading(true);
+      setIsUploading(true);
 
-    await onUploadSuccess({ file: selectedFile });
-  } catch (err) {
-    onError("업로드에 실패했습니다.");
-  } finally {
-    setIsUploading(false);
-  }
+      await onUploadSuccess({ file: selectedFile });
+    } catch (err) {
+      onError("업로드에 실패했습니다.");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
     <>
-      {isUploading && <LoadingModal />}
+      {isUploading && <LoadingOverlay />}
       <div className="w-full max-w-2xl">
         <div
           onDragEnter={handleDragEnter}
@@ -112,9 +112,7 @@ const VideoUploader = ({ onUploadSuccess, onError }) => {
               <p className="text-sm text-gray-400">
                 지원 형식: MP4, AVI, MOV, MKV 등
               </p>
-              <p className="text-sm text-gray-400">
-                크기: 최대 500MB
-              </p>
+              <p className="text-sm text-gray-400">크기: 최대 500MB</p>
             </div>
 
             <Button

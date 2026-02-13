@@ -8,7 +8,7 @@ import EmailInput from "./components/EmailInput";
 import PositionSelection from "./components/PositionSelection";
 import Button from "@/common/Button";
 import ErrorModal from "@/common/ErrorModal";
-import LoadingModal from "@/common/LoadingModal";
+import LoadingOverlay from "@/common/LoadingOverlay";
 import useVideoEditStore from "@/store/videoEditStore";
 
 const CharacterSelectionPage = () => {
@@ -189,7 +189,7 @@ const CharacterSelectionPage = () => {
         <ErrorModal onClose={closeError} onClick={closeError} message={error} />
       )}
 
-      {isSubmitting && <LoadingModal />}
+      {isSubmitting && <LoadingOverlay />}
     </>
   );
 };

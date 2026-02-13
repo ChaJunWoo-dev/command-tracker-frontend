@@ -6,7 +6,7 @@ import TrimSlider from "./components/TrimSlider";
 import VideoPlayer from "./components/VideoPlayer";
 import Button from "@/common/Button";
 import ErrorModal from "@/common/ErrorModal";
-import LoadingModal from "@/common/LoadingModal";
+import LoadingOverlay from "@/common/LoadingOverlay";
 import useVideoEditStore from "@/store/videoEditStore";
 
 const VideoEditPage = () => {
@@ -155,7 +155,7 @@ const VideoEditPage = () => {
           </div>
         </div>
       )}
-      {isLoading && <LoadingModal />}
+      {isLoading && <LoadingOverlay />}
       {error && (
         <ErrorModal onClose={closeError} onClick={closeError} message={error} />
       )}

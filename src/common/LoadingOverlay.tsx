@@ -1,4 +1,4 @@
-const LoadingModal = () => {
+const LoadingOverlay = () => {
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-slate-200 bg-opacity-50">
       <div className="rounded-md flex flex-col items-center">
@@ -13,4 +13,4 @@ const LoadingModal = () => {
   );
 };
 
-export default LoadingModal;
+export default LoadingOverlay;
