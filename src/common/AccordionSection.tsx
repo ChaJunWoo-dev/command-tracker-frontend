@@ -1,6 +1,20 @@
-import PropTypes from "prop-types";
+import React from "react";
 
-const AccordionSection = ({ title, selectedValue, isOpen, onToggle, children }) => {
+interface AccordionSectionProps {
+  title: string;
+  selectedValue?: string;
+  isOpen: boolean;
+  children: React.ReactNode;
+  onToggle: () => void;
+}
+
+const AccordionSection = ({
+  title,
+  selectedValue,
+  isOpen,
+  children,
+  onToggle,
+}: AccordionSectionProps) => {
   return (
     <div className="border-b border-gray-700">
       <button
@@ -40,14 +54,6 @@ const AccordionSection = ({ title, selectedValue, isOpen, onToggle, children }) 
       </div>
     </div>
   );
-};
-
-AccordionSection.propTypes = {
-  title: PropTypes.string.isRequired,
-  selectedValue: PropTypes.string,
-  isOpen: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
 };
 
 export default AccordionSection;

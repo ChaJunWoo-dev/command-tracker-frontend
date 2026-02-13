@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import React from "react";
 
 const buttonClass = `
   text-white text-lg py-2 min-w-32 w-auto
@@ -9,7 +9,13 @@ const buttonClass = `
   transition-colors duration-200
 `;
 
-const Button = ({ children, onClick, disabled = false }) => {
+interface ButtonProps {
+  children: React.ReactNode;
+  onClick: () => void;
+  disabled?: boolean;
+}
+
+const Button = ({ children, onClick, disabled = false }: ButtonProps) => {
   return (
     <button
       type="button"
@@ -20,12 +26,6 @@ const Button = ({ children, onClick, disabled = false }) => {
       {children}
     </button>
   );
-};
-
-Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  onClick: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
 };
 
 export default Button;
