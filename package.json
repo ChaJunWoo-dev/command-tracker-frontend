@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint \"./**/*.{js,jsx}\"",
-    "fix": "eslint \"./**/*.{js,jsx}\" --fix",
+    "build": "tsc --noEmit && vite build",
+    "lint": "eslint \"./**/*.{js,jsx,ts,tsx}\"",
+    "fix": "eslint \"./**/*.{js,jsx,ts,tsx}\" --fix",
+    "type-check": "tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -50,7 +51,7 @@
     "vite": "^6.3.5"
   },
   "lint-staged": {
-    "*.{js,jsx}": [
+    "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ]
