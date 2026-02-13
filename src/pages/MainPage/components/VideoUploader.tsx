@@ -6,13 +6,18 @@ import LoadingOverlay from "@/common/LoadingOverlay";
 
 const MAX_SIZE = 500 * 1024 * 1024;
 
-const VideoUploader = ({ onUploadSuccess, onError }) => {
-  const [selectedFile, setSelectedFile] = useState(null);
+interface VideoUploaderProps {
+  onUploadSuccess: (data: { file: File }) => void;
+  onError: (message: string) => void;
+}
+
+const VideoUploader = ({ onUploadSuccess, onError }: VideoUploaderProps) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const validateFile = (file) => {
+  const validateFile = (file: File) => {
     if (!file.type.startsWith("video/")) {
       onError("비디오 파일만 업로드 가능합니다.");
       return false;
@@ -26,8 +31,8 @@ const VideoUploader = ({ onUploadSuccess, onError }) => {
     return true;
   };
 
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0];
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
     if (validateFile(file)) {
@@ -35,21 +40,21 @@ const VideoUploader = ({ onUploadSuccess, onError }) => {
     }
   };
 
-  const handleDragEnter = (e) => {
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(true);
   };
 
-  const handleDragLeave = (e) => {
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
 
@@ -68,7 +73,7 @@ const VideoUploader = ({ onUploadSuccess, onError }) => {
     try {
       setIsUploading(true);
 
-      await onUploadSuccess({ file: selectedFile });
+      onUploadSuccess({ file: selectedFile });
     } catch (err) {
       onError("업로드에 실패했습니다.");
     } finally {

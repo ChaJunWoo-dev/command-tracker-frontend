@@ -11,17 +11,23 @@ const buttonClass = `
 
 interface ButtonProps {
   children: React.ReactNode;
-  onClick: () => void;
   disabled?: boolean;
+  className?: string;
+  onClick: () => void;
 }
 
-const Button = ({ children, onClick, disabled = false }: ButtonProps) => {
+const Button = ({
+  children,
+  disabled = false,
+  className,
+  onClick,
+}: ButtonProps) => {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={buttonClass}
+      className={`${buttonClass} ${className ?? ""}`}
     >
       {children}
     </button>
