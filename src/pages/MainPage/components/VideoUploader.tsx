@@ -47,6 +47,7 @@ const VideoUploader = ({ onUploadSuccess, onError }: VideoUploaderProps) => {
 
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    if (e.currentTarget.contains(e.relatedTarget as Node)) return;
     setIsDragging(false);
   };
 
