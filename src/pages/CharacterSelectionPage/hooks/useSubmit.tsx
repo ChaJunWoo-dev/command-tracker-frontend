@@ -56,7 +56,7 @@ const useSubmit = () => {
         const serverMessage = axiosError.response?.data?.message;
         const defaultMessage =
           axiosError.response && axiosError.response.status >= 500
-            ? "서버에서 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+            ? "서버에서 오류가 발생했습니다. \n잠시 후 다시 시도해주세요."
             : "요청 처리 중 오류가 발생했습니다.";
         setError(serverMessage || defaultMessage);
       }

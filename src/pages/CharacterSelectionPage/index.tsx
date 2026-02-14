@@ -67,10 +67,10 @@ const CharacterSelectionPage = () => {
 
   return (
     <>
-      <div className="min-h-screen py-8">
-        <div className="max-w-4xl mx-auto px-4">
+      <div className="w-full">
+        <div>
           <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden">
-            <div className="px-6 py-8 border-b border-gray-700">
+            <div className="px-6 py-8 border-b border-gray-700 text-center">
               <h1 className="text-3xl font-bold text-white">캐릭터 선택</h1>
               <p className="mt-2 text-gray-300">
                 분석할 캐릭터 정보를 선택해주세요
@@ -108,8 +108,9 @@ const CharacterSelectionPage = () => {
               onToggle={() => toggle("email")}
             />
 
-            <div className="px-6 py-6 bg-gray-800 flex gap-4">
+            <div className="px-6 py-6 bg-gray-800 flex justify-between">
               <Button
+                variant="secondary"
                 onClick={() =>
                   navigate("/video-edit", { state: { videoFile } })
                 }

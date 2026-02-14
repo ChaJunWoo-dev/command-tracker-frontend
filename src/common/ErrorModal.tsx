@@ -9,7 +9,7 @@ interface ErrorModalProps {
 const ErrorModal = ({ message, onClose, onClick }: ErrorModalProps) => {
   return (
     <Modal onClose={onClose} onClick={onClick}>
-      <p className="text-lg text-red-600">{message}</p>
+      <p className="text-lg text-red-400 text-center whitespace-pre-line">{message}</p>
     </Modal>
   );
 };
