@@ -7,9 +7,7 @@ const useLoadingTimeout = (isLoading: boolean) => {
     if (!isLoading) return;
 
     const timer = setTimeout(() => {
-      setTimeoutError(
-        "영상 로딩 실패: 파일이 손상되었거나 지원되지 않는 형식입니다."
-      );
+      setTimeoutError("파일이 손상되었거나 지원되지 않는 형식입니다.");
     }, 10000);
 
     return () => clearTimeout(timer);

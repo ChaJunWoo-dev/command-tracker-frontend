@@ -106,8 +106,8 @@ const VideoEditPage = () => {
   return (
     <>
       {videoSrc && (
-        <div className="w-full flex flex-col items-center">
-          <div className="space-y-6">
+        <div className="flex flex-col items-center w-full">
+          <div className="w-full space-y-6">
             <VideoPlayer
               videoRef={playerRef}
               url={videoSrc}
@@ -122,7 +122,9 @@ const VideoEditPage = () => {
                 onLoadComplete={() => setIsLoading(false)}
               />
             )}
-            <Button onClick={handleEdit}>다음</Button>
+            <div className="flex justify-end">
+              <Button onClick={handleEdit}>다음</Button>
+            </div>
           </div>
         </div>
       )}

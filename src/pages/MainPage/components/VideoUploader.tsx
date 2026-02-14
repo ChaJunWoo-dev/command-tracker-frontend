@@ -123,7 +123,6 @@ const VideoUploader = ({ onUploadSuccess, onError }: VideoUploaderProps) => {
 
             <Button
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-2"
             >
               파일 선택
             </Button>
