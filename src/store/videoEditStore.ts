@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface VideoEditState {
-  trim: [number, number] | null;
+  trim: [number, number];
   character: string | undefined;
   position: string | undefined;
   email: string;
@@ -17,7 +17,7 @@ interface VideoEditState {
 const useVideoEditStore = create<VideoEditState>()(
   persist(
     (set) => ({
-      trim: null,
+      trim: [0, 0],
       character: undefined,
       position: undefined,
       email: "",
@@ -29,7 +29,7 @@ const useVideoEditStore = create<VideoEditState>()(
 
       reset: () =>
         set({
-          trim: null,
+          trim: [0, 0],
           character: undefined,
           position: undefined,
           email: "",

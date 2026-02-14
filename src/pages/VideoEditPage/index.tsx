@@ -14,11 +14,9 @@ const VideoEditPage = () => {
   const { videoFile } = state || {};
   const navigate = useNavigate();
 
-  const videoWrapperRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<HTMLVideoElement>(null);
 
   const [videoSrc, setVideoSrc] = useState<string>();
-  const [playerWidth, setPlayerWidth] = useState(0);
   const [isLoading, setIsLoading] = useState(!!videoFile);
   const [error, setError] = useState<string | null>(null);
   const [duration, setDuration] = useState(0);
@@ -33,10 +31,7 @@ const VideoEditPage = () => {
   const handleDuration = (videoDuration: number) => {
     const roundedDuration = roundToSliderStep(videoDuration);
     setDuration(roundedDuration);
-
-    if (!trim || trim[1] > roundedDuration) {
-      setTrim([0, roundedDuration]);
-    }
+    setTrim([0, roundedDuration]);
   };
 
   const handleTrimChange = (newTrim: number[]) => {
@@ -60,9 +55,7 @@ const VideoEditPage = () => {
   };
 
   useEffect(() => {
-    if (!videoFile) {
-      return;
-    }
+    if (!videoFile) return;
 
     const url = URL.createObjectURL(videoFile);
     setVideoSrc(url);
@@ -81,27 +74,11 @@ const VideoEditPage = () => {
     return () => clearTimeout(timer);
   }, [isLoading]);
 
-  useEffect(() => {
-    if (!videoWrapperRef.current || !videoSrc) {
-      return;
-    }
-
-    const measureWidth = () => {
-      if (videoWrapperRef.current) {
-        setPlayerWidth(videoWrapperRef.current.offsetWidth);
-      }
-    };
-
-    const rafId = requestAnimationFrame(measureWidth);
-
-    return () => cancelAnimationFrame(rafId);
-  }, [videoSrc]);
-
   const handleEdit = () => {
     try {
       if (!trim) return;
 
-      const MAX_TRIM_MINUTES = 10;
+      const MAX_TRIM_MINUTES = 30;
       const [start, end] = trim;
       const currentTrimMinutes = (end - start) / 60;
       if (currentTrimMinutes > MAX_TRIM_MINUTES) {
@@ -138,20 +115,17 @@ const VideoEditPage = () => {
       {videoSrc && (
         <div className="w-full flex flex-col items-center">
           <div className="space-y-6">
-            <div ref={videoWrapperRef} className="w-fit mx-auto">
-              <VideoPlayer
-                videoRef={playerRef}
-                url={videoSrc}
-                onDuration={handleDuration}
-              />
-            </div>
-            {playerWidth > 0 && duration > 0 && trim && (
+            <VideoPlayer
+              videoRef={playerRef}
+              url={videoSrc}
+              onDuration={handleDuration}
+            />
+            {duration > 0 && (
               <TrimSlider
                 trim={trim}
                 duration={duration}
                 videoSrc={videoSrc}
                 onChange={handleTrimChange}
-                width={playerWidth}
                 onLoadComplete={() => setIsLoading(false)}
               />
             )}

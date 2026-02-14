@@ -3,11 +3,10 @@ import { useEffect, useRef, useState } from "react";
 
 import { Range } from "react-range";
 
-const THUMB_W = 60;
+const THUMB_COUNT = 10;
 const THUMB_H = 60;
 
 interface TrimSliderProps {
-  width: number;
   trim: [number, number];
   duration: number;
   videoSrc: string;
@@ -16,7 +15,6 @@ interface TrimSliderProps {
 }
 
 const TrimSlider = ({
-  width,
   trim,
   duration,
   videoSrc,
@@ -32,6 +30,8 @@ const TrimSlider = ({
     video.src = videoSrc;
     video.muted = true;
     video.crossOrigin = "anonymous";
+    video.preload = "auto";
+    video.load();
 
     const canvas = document.createElement("canvas");
 
@@ -52,8 +52,9 @@ const TrimSlider = ({
       !videoRef.current ||
       !canvasRef.current ||
       thumbs.length > 0
-    )
+    ) {
       return;
+    }
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -76,7 +77,7 @@ const TrimSlider = ({
       });
 
     const generateThumbnails = async () => {
-      const thumbCount = Math.max(8, Math.ceil(width / THUMB_W));
+      const thumbCount = THUMB_COUNT;
       const thumbnails = [];
 
       for (let i = 0; i < thumbCount; i++) {
@@ -103,10 +104,10 @@ const TrimSlider = ({
     return () => {
       video.removeEventListener("loadedmetadata", onMetadataLoaded);
     };
-  }, [videoSrc, duration, width, onLoadComplete]);
+  }, [videoSrc, duration, onLoadComplete]);
 
   return (
-    <div className="mx-auto select-none" style={{ width }}>
+    <div className="w-full select-none">
       <div
         className="relative rounded-lg overflow-hidden border-2 border-gray-700"
         style={{ height: THUMB_H }}
