@@ -8,21 +8,33 @@ import Button from "@/common/Button";
 import ErrorModal from "@/common/ErrorModal";
 import LoadingOverlay from "@/common/LoadingOverlay";
 import useVideoEditStore from "@/store/videoEditStore";
+import useObjectUrl from "./hooks/useObjectUrl";
+import useLoadingTimeout from "./hooks/useLoadingTimeout";
 
 const VideoEditPage = () => {
   const { state } = useLocation() as { state: { videoFile: File } };
   const { videoFile } = state || {};
+
   const navigate = useNavigate();
 
   const playerRef = useRef<HTMLVideoElement>(null);
 
-  const [videoSrc, setVideoSrc] = useState<string>();
-  const [isLoading, setIsLoading] = useState(!!videoFile);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(!!videoFile);
   const [duration, setDuration] = useState(0);
 
   const trim = useVideoEditStore((state) => state.trim);
   const setTrim = useVideoEditStore((state) => state.setTrim);
+
+  const videoSrc = useObjectUrl(videoFile);
+  const timeoutError = useLoadingTimeout(isLoading);
+
+  useEffect(() => {
+    if (timeoutError) {
+      setError(timeoutError);
+      setIsLoading(false);
+    }
+  }, [timeoutError]);
 
   const roundToSliderStep = (seconds: number) => {
     return Math.round(seconds * 100) / 100;
@@ -31,6 +43,7 @@ const VideoEditPage = () => {
   const handleDuration = (videoDuration: number) => {
     const roundedDuration = roundToSliderStep(videoDuration);
     setDuration(roundedDuration);
+
     setTrim([0, roundedDuration]);
   };
 
@@ -53,26 +66,6 @@ const VideoEditPage = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (!videoFile) return;
-
-    const url = URL.createObjectURL(videoFile);
-    setVideoSrc(url);
-
-    return () => URL.revokeObjectURL(url);
-  }, [videoFile]);
-
-  useEffect(() => {
-    if (!isLoading) return;
-
-    const timer = setTimeout(() => {
-      setError("영상 로딩 실패: 파일이 손상되었거나 지원되지 않는 형식입니다.");
-      setIsLoading(false);
-    }, 10000);
-
-    return () => clearTimeout(timer);
-  }, [isLoading]);
 
   const handleEdit = () => {
     try {
