@@ -1,7 +1,7 @@
 import AccordionSection from "@/common/AccordionSection";
 
 interface PositionSelectionProps {
-  selectedPosition: string;
+  selectedPosition?: string;
   isOpen: boolean;
   onPositionSelect: (position: string) => void;
   onToggle: () => void;

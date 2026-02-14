@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import CharacterSelection from "./components/CharacterSelection";
@@ -12,40 +12,42 @@ import LoadingOverlay from "@/common/LoadingOverlay";
 import useVideoEditStore from "@/store/videoEditStore";
 
 const CharacterSelectionPage = () => {
-  const location = useLocation();
+  const { state } = useLocation() as { state: { videoFile: File } };
+  const { videoFile } = state || {};
+
   const navigate = useNavigate();
-  const { videoFile } = location.state || {};
 
   const trim = useVideoEditStore((state) => state.trim);
   const selectedCharacter = useVideoEditStore((state) => state.character);
   const selectedPosition = useVideoEditStore((state) => state.position);
   const email = useVideoEditStore((state) => state.email);
+
   const setCharacter = useVideoEditStore((state) => state.setCharacter);
   const setPosition = useVideoEditStore((state) => state.setPosition);
   const setEmail = useVideoEditStore((state) => state.setEmail);
 
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openSections, setOpenSections] = useState({
-    Position: !selectedPosition,
-    character: selectedPosition && !selectedCharacter,
-    email: selectedPosition && selectedCharacter,
+    position: !selectedPosition,
+    character: !!(selectedPosition && !selectedCharacter),
+    email: !!(selectedPosition && selectedCharacter),
   });
 
-  const formatTime = (seconds) => {
+  const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const handlePositionSelect = (Position) => {
-    setPosition(Position);
-    setOpenSections({ Position: false, character: true, email: false });
+  const handlePositionSelect = (position: string) => {
+    setPosition(position);
+    setOpenSections({ position: false, character: true, email: false });
   };
 
-  const handleCharacterSelect = (character) => {
+  const handleCharacterSelect = (character: string) => {
     setCharacter(character);
-    setOpenSections({ Position: false, character: false, email: true });
+    setOpenSections({ position: false, character: false, email: true });
   };
 
   const handleSubmit = async () => {
@@ -56,8 +58,11 @@ const CharacterSelectionPage = () => {
       if (!selectedCharacter) {
         throw new Error("캐릭터를 선택해주세요");
       }
-      if (email.trim() === "") {
+      if (email?.trim() === "") {
         throw new Error("이메일을 입력해주세요");
+      }
+      if (!trim) {
+        throw new Error("편집 구간이 없습니다.");
       }
       if (!videoFile) {
         throw new Error("비디오 파일이 없습니다.");
@@ -86,18 +91,17 @@ const CharacterSelectionPage = () => {
 
       navigate("/submit-success", { state: { email } });
     } catch (err) {
-      if (!err.response) {
-        setError("서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+      const axiosError = err as AxiosError<{ message?: string }>;
+      if (!axiosError.response) {
+        setError("서버에 연결할 수 없습니다...");
       } else {
-        const serverMessage = err.response?.data?.message;
+        const serverMessage = axiosError.response.data?.message;
         const defaultMessage =
-          err.response.status >= 500
-            ? "서버에서 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+          axiosError.response.status >= 500
+            ? "서버에서 오류가 발생했습니다..."
             : "요청 처리 중 오류가 발생했습니다.";
         setError(serverMessage || defaultMessage);
       }
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -105,7 +109,7 @@ const CharacterSelectionPage = () => {
     setError(null);
   };
 
-  const toggleSection = (section) => {
+  const toggleSection = (section: keyof typeof openSections) => {
     setOpenSections((prev) => ({
       ...prev,
       [section]: !prev[section],
@@ -148,8 +152,8 @@ const CharacterSelectionPage = () => {
             <PositionSelection
               selectedPosition={selectedPosition}
               onPositionSelect={handlePositionSelect}
-              isOpen={openSections.Position}
-              onToggle={() => toggleSection("Position")}
+              isOpen={openSections.position}
+              onToggle={() => toggleSection("position")}
             />
 
             <CharacterSelection

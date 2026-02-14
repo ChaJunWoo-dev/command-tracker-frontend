@@ -3,9 +3,9 @@ import CharacterGrid from "@/common/character/characterGrid";
 import characters from "@/data/characters";
 
 interface CharacterSelectionProps {
-  selectedCharacter: string;
+  selectedCharacter?: string;
   isOpen: boolean;
-  onCharacterSelect: () => void;
+  onCharacterSelect: (character: string) => void;
   onToggle: () => void;
 }
 

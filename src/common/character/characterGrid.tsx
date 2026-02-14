@@ -6,7 +6,7 @@ interface Character {
 
 interface CharacterGridProps {
   list: Character[];
-  selectable: boolean;
+  selectable?: boolean;
   selectedCharacter?: string;
   onCharacterSelect?: (name: string) => void;
   columns?: string;

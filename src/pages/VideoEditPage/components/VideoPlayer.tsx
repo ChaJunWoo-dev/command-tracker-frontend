@@ -2,7 +2,7 @@ import React from "react";
 
 interface VideoPlayerProps {
   url: string;
-  videoRef: React.RefObject<HTMLVideoElement>;
+  videoRef: React.RefObject<HTMLVideoElement | null>;
   onDuration: (duration: number) => void;
 }
 const VideoPlayer = ({ url, videoRef, onDuration }: VideoPlayerProps) => {

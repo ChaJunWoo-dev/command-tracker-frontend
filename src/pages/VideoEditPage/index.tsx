@@ -10,25 +10,27 @@ import LoadingOverlay from "@/common/LoadingOverlay";
 import useVideoEditStore from "@/store/videoEditStore";
 
 const VideoEditPage = () => {
-  const location = useLocation();
+  const { state } = useLocation() as { state: { videoFile: File } };
+  const { videoFile } = state || {};
   const navigate = useNavigate();
-  const videoWrapperRef = useRef(null);
-  const { videoFile } = location.state || {};
-  const [videoSrc, setVideoSrc] = useState();
+
+  const videoWrapperRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<HTMLVideoElement>(null);
+
+  const [videoSrc, setVideoSrc] = useState<string>();
   const [playerWidth, setPlayerWidth] = useState(0);
-  const [isLoading, setIsLoading] = useState(videoFile);
-  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(!!videoFile);
+  const [error, setError] = useState<string | null>(null);
+  const [duration, setDuration] = useState(0);
 
   const trim = useVideoEditStore((state) => state.trim);
   const setTrim = useVideoEditStore((state) => state.setTrim);
-  const [duration, setDuration] = useState(0);
-  const playerRef = useRef(null);
 
-  const roundToSliderStep = (seconds) => {
+  const roundToSliderStep = (seconds: number) => {
     return Math.round(seconds * 100) / 100;
   };
 
-  const handleDuration = (videoDuration) => {
+  const handleDuration = (videoDuration: number) => {
     const roundedDuration = roundToSliderStep(videoDuration);
     setDuration(roundedDuration);
 
@@ -37,11 +39,11 @@ const VideoEditPage = () => {
     }
   };
 
-  const handleTrimChange = (newTrim) => {
+  const handleTrimChange = (newTrim: number[]) => {
     const [newStart, newEnd] = newTrim;
     const [prevStart, prevEnd] = trim || [0, 0];
 
-    const roundedTrim = [
+    const roundedTrim: [number, number] = [
       roundToSliderStep(newStart),
       roundToSliderStep(newEnd),
     ];
@@ -97,6 +99,8 @@ const VideoEditPage = () => {
 
   const handleEdit = () => {
     try {
+      if (!trim) return;
+
       const MAX_TRIM_MINUTES = 10;
       const [start, end] = trim;
       const currentTrimMinutes = (end - start) / 60;

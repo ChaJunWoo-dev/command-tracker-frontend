@@ -4,16 +4,16 @@ import { LuFilm, LuCircleCheck, LuUpload } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
 import CharacterGrid from "@/common/character/characterGrid";
-import StepCard from "./components/StepCard";
-import VideoUploader from "./components/VideoUploader";
+import StepCard from "./components/StepCard.js";
+import VideoUploader from "./components/VideoUploader.js";
 import ErrorModal from "@/common/ErrorModal";
 import characters from "@/data/characters";
 
 const MainPage = () => {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleUploadSuccess = (data) => {
+  const handleUploadSuccess = (data: { file: File }) => {
     navigate("/video-edit", {
       state: {
         videoFile: data.file,
@@ -21,7 +21,7 @@ const MainPage = () => {
     });
   };
 
-  const handleError = (errorMessage) => {
+  const handleError = (errorMessage: string) => {
     setError(errorMessage);
   };
 

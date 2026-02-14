@@ -10,7 +10,7 @@ interface TrimSliderProps {
   trim: [number, number];
   duration: number;
   videoSrc: string;
-  onChange: () => void;
+  onChange: (newTrim: number[]) => void;
   onLoadComplete: () => void;
 }
 
