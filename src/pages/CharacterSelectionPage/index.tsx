@@ -1,15 +1,15 @@
-import { useState } from "react";
-
-import axios, { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import CharacterSelection from "./components/CharacterSelection";
 import EmailInput from "./components/EmailInput";
 import PositionSelection from "./components/PositionSelection";
+import useSubmit from "./hooks/useSubmit";
+import useSectionToggle from "./hooks/useSectionToggle";
 import Button from "@/common/Button";
 import ErrorModal from "@/common/ErrorModal";
 import LoadingOverlay from "@/common/LoadingOverlay";
 import useVideoEditStore from "@/store/videoEditStore";
+import formatTime from "@/utils/formatTime";
 
 const CharacterSelectionPage = () => {
   const { state } = useLocation() as { state: { videoFile: File } };
@@ -26,94 +26,32 @@ const CharacterSelectionPage = () => {
   const setPosition = useVideoEditStore((state) => state.setPosition);
   const setEmail = useVideoEditStore((state) => state.setEmail);
 
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [openSections, setOpenSections] = useState({
+  const { error, isSubmitting, submit, clearError } = useSubmit();
+  const { openSections, open, toggle } = useSectionToggle({
     position: !selectedPosition,
     character: !!(selectedPosition && !selectedCharacter),
     email: !!(selectedPosition && selectedCharacter),
   });
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
-
   const handlePositionSelect = (position: string) => {
     setPosition(position);
-    setOpenSections({ position: false, character: true, email: false });
+    open("character");
   };
 
   const handleCharacterSelect = (character: string) => {
     setCharacter(character);
-    setOpenSections({ position: false, character: false, email: true });
+    open("email");
   };
 
-  const handleSubmit = async () => {
-    try {
-      if (!selectedPosition) {
-        throw new Error("분석할 캐릭터 위치를 선택해주세요");
-      }
-      if (!selectedCharacter) {
-        throw new Error("캐릭터를 선택해주세요");
-      }
-      if (email?.trim() === "") {
-        throw new Error("이메일을 입력해주세요");
-      }
-      if (!trim) {
-        throw new Error("편집 구간이 없습니다.");
-      }
-      if (!videoFile) {
-        throw new Error("비디오 파일이 없습니다.");
-      }
-
-      setIsSubmitting(true);
-
-      const response = await axios.post("/api/video/prepare", {
-        trimStart: trim[0],
-        trimEnd: trim[1],
-        position: selectedPosition,
-        character: selectedCharacter,
-        email: email,
-      });
-      const { uploadToken } = response.data;
-
-      const formData = new FormData();
-      formData.append("video", videoFile);
-
-      await axios.post(`/api/video/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${uploadToken}`,
-        },
-      });
-
-      navigate("/submit-success", { state: { email } });
-    } catch (err) {
-      const axiosError = err as AxiosError<{ message?: string }>;
-      if (!axiosError.response) {
-        setError("서버에 연결할 수 없습니다...");
-      } else {
-        const serverMessage = axiosError.response.data?.message;
-        const defaultMessage =
-          axiosError.response.status >= 500
-            ? "서버에서 오류가 발생했습니다..."
-            : "요청 처리 중 오류가 발생했습니다.";
-        setError(serverMessage || defaultMessage);
-      }
-    }
-  };
-
-  const closeError = () => {
-    setError(null);
-  };
-
-  const toggleSection = (section: keyof typeof openSections) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
+  const handleSubmit = () => {
+    if (!selectedPosition || !selectedCharacter || !trim || !videoFile) return;
+    submit({
+      position: selectedPosition,
+      character: selectedCharacter,
+      email,
+      trim,
+      videoFile,
+    });
   };
 
   if (!videoFile || !trim) {
@@ -153,21 +91,21 @@ const CharacterSelectionPage = () => {
               selectedPosition={selectedPosition}
               onPositionSelect={handlePositionSelect}
               isOpen={openSections.position}
-              onToggle={() => toggleSection("position")}
+              onToggle={() => toggle("position")}
             />
 
             <CharacterSelection
               selectedCharacter={selectedCharacter}
               onCharacterSelect={handleCharacterSelect}
               isOpen={openSections.character}
-              onToggle={() => toggleSection("character")}
+              onToggle={() => toggle("character")}
             />
 
             <EmailInput
               email={email}
               onEmailChange={setEmail}
               isOpen={openSections.email}
-              onToggle={() => toggleSection("email")}
+              onToggle={() => toggle("email")}
             />
 
             <div className="px-6 py-6 bg-gray-800 flex gap-4">
@@ -190,7 +128,7 @@ const CharacterSelectionPage = () => {
       </div>
 
       {error && (
-        <ErrorModal onClose={closeError} onClick={closeError} message={error} />
+        <ErrorModal onClose={clearError} onClick={clearError} message={error} />
       )}
 
       {isSubmitting && <LoadingOverlay />}

@@ -1,5 +1,5 @@
 import AccordionSection from "@/common/AccordionSection";
-import CharacterGrid from "@/common/character/characterGrid";
+import CharacterGrid from "@/common/character/CharacterGrid";
 import characters from "@/data/characters";
 
 interface CharacterSelectionProps {

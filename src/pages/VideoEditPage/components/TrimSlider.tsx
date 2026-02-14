@@ -1,3 +1,4 @@
+import formatTime from "@/utils/formatTime";
 import { useEffect, useRef, useState } from "react";
 
 import { Range } from "react-range";
@@ -25,16 +26,6 @@ const TrimSlider = ({
   const [thumbs, setThumbs] = useState<string[]>([]);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  const formatTime = (sec: number) => {
-    const hour = Math.floor(sec / 3600);
-    const minutes = Math.floor((sec % 3600) / 60);
-    const seconds = Math.floor(sec % 60);
-
-    return hour
-      ? `${hour}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
-      : `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  };
 
   useEffect(() => {
     const video = document.createElement("video");

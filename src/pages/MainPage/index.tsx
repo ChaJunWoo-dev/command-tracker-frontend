@@ -3,7 +3,7 @@ import { useState } from "react";
 import { LuFilm, LuCircleCheck, LuUpload } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
-import CharacterGrid from "@/common/character/characterGrid";
+import CharacterGrid from "@/common/character/CharacterGrid.js";
 import StepCard from "./components/StepCard.js";
 import VideoUploader from "./components/VideoUploader.js";
 import ErrorModal from "@/common/ErrorModal";
