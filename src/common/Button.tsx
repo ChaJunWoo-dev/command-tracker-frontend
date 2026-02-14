@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import React from "react";
 
 const buttonClass = `
   text-white text-lg py-2 min-w-32 w-auto
@@ -9,23 +9,29 @@ const buttonClass = `
   transition-colors duration-200
 `;
 
-const Button = ({ children, onClick, disabled = false }) => {
+interface ButtonProps {
+  children: React.ReactNode;
+  disabled?: boolean;
+  className?: string;
+  onClick: () => void;
+}
+
+const Button = ({
+  children,
+  disabled = false,
+  className,
+  onClick,
+}: ButtonProps) => {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={buttonClass}
+      className={`${buttonClass} ${className ?? ""}`}
     >
       {children}
     </button>
   );
-};
-
-Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  onClick: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
 };
 
 export default Button;

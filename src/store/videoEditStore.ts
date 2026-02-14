@@ -1,13 +1,26 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-const useVideoEditStore = create(
+interface VideoEditState {
+  trim: [number, number] | null;
+  character: string | undefined;
+  position: string | undefined;
+  email: string;
+
+  setTrim: (trim: [number, number]) => void;
+  setCharacter: (character: string) => void;
+  setPosition: (position: string) => void;
+  setEmail: (email: string) => void;
+  reset: () => void;
+}
+
+const useVideoEditStore = create<VideoEditState>()(
   persist(
     (set) => ({
       trim: null,
-      character: null,
-      position: null,
-      email: null,
+      character: undefined,
+      position: undefined,
+      email: "",
 
       setTrim: (trim) => set({ trim }),
       setCharacter: (character) => set({ character }),
@@ -17,9 +30,9 @@ const useVideoEditStore = create(
       reset: () =>
         set({
           trim: null,
-          character: null,
-          position: null,
-          email: null,
+          character: undefined,
+          position: undefined,
+          email: "",
         }),
     }),
     {

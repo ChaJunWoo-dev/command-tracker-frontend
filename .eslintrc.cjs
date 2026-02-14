@@ -5,11 +5,14 @@ module.exports = {
   },
   extends: [
     "airbnb",
+    "airbnb/hooks",
     "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
     "plugin:storybook/recommended",
   ],
-  plugins: ["react", "prettier", "storybook", "import"],
+  parser: "@typescript-eslint/parser",
+  plugins: ["react", "prettier", "storybook", "import", "@typescript-eslint"],
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
@@ -18,57 +21,19 @@ module.exports = {
     },
   },
   rules: {
-    "no-await-in-loop": "off",
-    "react/jsx-no-bind": "off",
-    "react/function-component-definition": "off",
-    "no-unused-vars": "warn",
-    "no-console": "error",
-    "import/order": [
-      "error",
-      {
-        groups: [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index",
-        ],
-        pathGroups: [
-          { pattern: "next", group: "builtin", position: "before" },
-          { pattern: "react", group: "builtin", position: "before" },
-          { pattern: "@/components/**", group: "internal" },
-          { pattern: "@/hooks/**", group: "internal" },
-          { pattern: "@/util/**", group: "internal" },
-        ],
-        pathGroupsExcludedImportTypes: ["react"],
-        alphabetize: {
-          order: "asc",
-          caseInsensitive: true,
-        },
-        "newlines-between": "always",
-      },
-    ],
-    "react/react-in-jsx-scope": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        endOfLine: "lf",
-        useTabs: false,
-      },
-    ],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+
+    "react/jsx-filename-extension": [1, { extensions: [".jsx", ".tsx"] }],
+
     "import/extensions": [
       "error",
       "ignorePackages",
       {
         js: "never",
         jsx: "never",
-      },
-    ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        devDependencies: ["**/*.test.jsx", "**/*.test.js", "**/vite.config.js"],
+        ts: "never",
+        tsx: "never",
       },
     ],
   },
@@ -78,7 +43,7 @@ module.exports = {
     },
     "import/resolver": {
       node: {
-        extensions: [".js", ".jsx"],
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
       },
       alias: {
         map: [
@@ -86,7 +51,7 @@ module.exports = {
           ["@pages", "./src/pages"],
           ["@components", "./src/components"],
         ],
-        extensions: [".js", ".jsx"],
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
       },
     },
   },

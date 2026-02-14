@@ -1,8 +1,18 @@
-import PropTypes from "prop-types";
-
 import AccordionSection from "@/common/AccordionSection";
 
-const EmailInput = ({ email, onEmailChange, isOpen, onToggle }) => {
+interface EmailInputProps {
+  email: string;
+  isOpen: boolean;
+  onEmailChange: (value: string) => void;
+  onToggle: () => void;
+}
+
+const EmailInput = ({
+  email,
+  isOpen,
+  onEmailChange,
+  onToggle,
+}: EmailInputProps) => {
   return (
     <AccordionSection
       title="3. 이메일을 입력하세요"
@@ -22,13 +32,6 @@ const EmailInput = ({ email, onEmailChange, isOpen, onToggle }) => {
       </p>
     </AccordionSection>
   );
-};
-
-EmailInput.propTypes = {
-  email: PropTypes.string.isRequired,
-  onEmailChange: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired,
 };
 
 export default EmailInput;

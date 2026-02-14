@@ -1,10 +1,15 @@
-import PropTypes from "prop-types";
-
 const inputClass = `
   flex-grow border border-gray-500 rounded-md px-3 py-3 focus:outline-[#E08345]
 `;
 
-const Input = ({ type = "text", value, onChange, placeholder }) => {
+interface InputProps {
+  type?: string;
+  value: string;
+  placeholder?: string;
+  onChange: () => void;
+}
+
+const Input = ({ type = "text", value, placeholder, onChange }: InputProps) => {
   return (
     <input
       type={type}
@@ -14,13 +19,6 @@ const Input = ({ type = "text", value, onChange, placeholder }) => {
       className={inputClass}
     />
   );
-};
-
-Input.propTypes = {
-  type: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string.isRequired,
 };
 
 export default Input;

@@ -5,7 +5,7 @@ import Button from "@/common/Button";
 import useVideoEditStore from "@/store/videoEditStore";
 
 const SubmitSuccess = () => {
-  const { state } = useLocation();
+  const { state } = useLocation() as { state: { email: string } };
   const navigate = useNavigate();
   const reset = useVideoEditStore((state) => state.reset);
 

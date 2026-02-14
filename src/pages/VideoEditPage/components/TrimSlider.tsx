@@ -1,10 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 
 import { Range } from "react-range";
-import PropTypes from "prop-types";
 
 const THUMB_W = 60;
 const THUMB_H = 60;
+
+interface TrimSliderProps {
+  width: number;
+  trim: [number, number];
+  duration: number;
+  videoSrc: string;
+  onChange: (newTrim: number[]) => void;
+  onLoadComplete: () => void;
+}
 
 const TrimSlider = ({
   width,
@@ -13,12 +21,12 @@ const TrimSlider = ({
   videoSrc,
   onChange,
   onLoadComplete,
-}) => {
-  const [thumbs, setThumbs] = useState([]);
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
+}: TrimSliderProps) => {
+  const [thumbs, setThumbs] = useState<string[]>([]);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const formatTime = (sec) => {
+  const formatTime = (sec: number) => {
     const hour = Math.floor(sec / 3600);
     const minutes = Math.floor((sec % 3600) / 60);
     const seconds = Math.floor(sec % 60);
@@ -47,12 +55,19 @@ const TrimSlider = ({
   }, [videoSrc]);
 
   useEffect(() => {
-    if (!videoSrc || !duration || !videoRef.current || thumbs.length > 0)
+    if (
+      !videoSrc ||
+      !duration ||
+      !videoRef.current ||
+      !canvasRef.current ||
+      thumbs.length > 0
+    )
       return;
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
     const captureFrame = () => {
       canvas.width = 160;
@@ -61,8 +76,8 @@ const TrimSlider = ({
       return canvas.toDataURL("image/jpeg", 0.55);
     };
 
-    const seekToTime = (time) =>
-      new Promise((resolve) => {
+    const seekToTime = (time: number) =>
+      new Promise<string>((resolve) => {
         video.addEventListener("seeked", () => resolve(captureFrame()), {
           once: true,
         });
@@ -180,15 +195,6 @@ const TrimSlider = ({
       </div>
     </div>
   );
-};
-
-TrimSlider.propTypes = {
-  width: PropTypes.number.isRequired,
-  duration: PropTypes.number.isRequired,
-  videoSrc: PropTypes.string.isRequired,
-  trim: PropTypes.arrayOf(PropTypes.number).isRequired,
-  onChange: PropTypes.func.isRequired,
-  onLoadComplete: PropTypes.func,
 };
 
 export default TrimSlider;

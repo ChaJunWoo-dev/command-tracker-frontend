@@ -1,12 +1,24 @@
-import PropTypes from "prop-types";
+interface Character {
+  name: string;
+  src: string;
+  isSupported?: boolean;
+}
+
+interface CharacterGridProps {
+  list: Character[];
+  selectable?: boolean;
+  selectedCharacter?: string;
+  onCharacterSelect?: (name: string) => void;
+  columns?: string;
+}
 
 const CharacterGrid = ({
   list,
   selectable = false,
-  selectedCharacter = null,
-  onCharacterSelect = null,
+  selectedCharacter,
+  onCharacterSelect,
   columns = "grid-cols-3 sm:grid-cols-4 md:grid-cols-6",
-}) => (
+}: CharacterGridProps) => (
   <div className={`grid ${columns} gap-3`}>
     {list.map(({ name, src, isSupported }) => {
       const isSelected = selectedCharacter === name;
@@ -17,7 +29,9 @@ const CharacterGrid = ({
           key={name}
           type={selectable ? "button" : undefined}
           onClick={
-            selectable && isSupported ? () => onCharacterSelect(name) : undefined
+            selectable && isSupported
+              ? () => onCharacterSelect?.(name)
+              : undefined
           }
           disabled={selectable && !isSupported}
           className={`flex flex-col items-center text-xs font-medium ${
@@ -49,19 +63,5 @@ const CharacterGrid = ({
     })}
   </div>
 );
-
-CharacterGrid.propTypes = {
-  list: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      src: PropTypes.string.isRequired,
-      isSupported: PropTypes.bool,
-    }),
-  ).isRequired,
-  selectable: PropTypes.bool,
-  selectedCharacter: PropTypes.string,
-  onCharacterSelect: PropTypes.func,
-  columns: PropTypes.string,
-};
 
 export default CharacterGrid;
