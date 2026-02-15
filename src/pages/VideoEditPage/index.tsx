@@ -7,6 +7,7 @@ import VideoPlayer from "./components/VideoPlayer";
 import Button from "@/common/Button";
 import ErrorModal from "@/common/ErrorModal";
 import LoadingOverlay from "@/common/LoadingOverlay";
+import PageHeader from "@/common/PageHeader";
 import useVideoEditStore from "@/store/videoEditStore";
 import useObjectUrl from "./hooks/useObjectUrl";
 import useLoadingTimeout from "./hooks/useLoadingTimeout";
@@ -107,7 +108,8 @@ const VideoEditPage = () => {
     <>
       {videoSrc && (
         <div className="flex flex-col items-center w-full">
-          <div className="w-full space-y-6">
+          <PageHeader title="영상 편집" description="분석할 구간을 설정하세요" />
+          <div className="w-full bg-gray-800 rounded-lg p-6 space-y-6">
             <VideoPlayer
               videoRef={playerRef}
               url={videoSrc}
@@ -122,9 +124,9 @@ const VideoEditPage = () => {
                 onLoadComplete={() => setIsLoading(false)}
               />
             )}
-            <div className="flex justify-end">
-              <Button onClick={handleEdit}>다음</Button>
-            </div>
+          </div>
+          <div className="w-full flex justify-end mt-6">
+            <Button onClick={handleEdit}>다음</Button>
           </div>
         </div>
       )}

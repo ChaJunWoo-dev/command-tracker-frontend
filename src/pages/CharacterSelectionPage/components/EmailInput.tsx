@@ -1,24 +1,18 @@
-import AccordionSection from "@/common/AccordionSection";
+import CardSection from "@/common/CardSection";
 
 interface EmailInputProps {
   email: string;
-  isOpen: boolean;
   onEmailChange: (value: string) => void;
-  onToggle: () => void;
 }
 
 const EmailInput = ({
   email,
-  isOpen,
   onEmailChange,
-  onToggle,
 }: EmailInputProps) => {
   return (
-    <AccordionSection
+    <CardSection
       title="3. 이메일을 입력하세요"
       selectedValue={email}
-      isOpen={isOpen}
-      onToggle={onToggle}
     >
       <input
         type="email"
@@ -30,7 +24,7 @@ const EmailInput = ({
       <p className="mt-2 text-sm text-gray-400">
         분석이 끝나면 위 이메일로 결과를 보내드립니다.
       </p>
-    </AccordionSection>
+    </CardSection>
   );
 };
 

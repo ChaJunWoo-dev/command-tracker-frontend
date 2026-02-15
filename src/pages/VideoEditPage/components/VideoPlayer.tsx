@@ -18,7 +18,7 @@ const VideoPlayer = ({ url, videoRef, onDuration }: VideoPlayerProps) => {
       src={url}
       controls
       onLoadedMetadata={handleLoadedMetadata}
-      className="max-w-full h-auto"
+      className="w-full h-auto"
     />
   );
 };

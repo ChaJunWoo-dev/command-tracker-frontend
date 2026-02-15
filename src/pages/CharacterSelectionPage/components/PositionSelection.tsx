@@ -1,17 +1,13 @@
-import AccordionSection from "@/common/AccordionSection";
+import CardSection from "@/common/CardSection";
 
 interface PositionSelectionProps {
   selectedPosition?: string;
-  isOpen: boolean;
   onPositionSelect: (position: string) => void;
-  onToggle: () => void;
 }
 
 const PositionSelection = ({
   selectedPosition,
-  isOpen,
   onPositionSelect,
-  onToggle,
 }: PositionSelectionProps) => {
   const baseButtonClass =
     "border-none focus:outline-none px-6 py-3 rounded-md transition-colors";
@@ -22,7 +18,7 @@ const PositionSelection = ({
   `;
 
   return (
-    <AccordionSection
+    <CardSection
       title="1. 분석할 캐릭터의 위치를 선택하세요"
       selectedValue={
         selectedPosition === "left"
@@ -31,8 +27,6 @@ const PositionSelection = ({
             ? "오른쪽"
             : undefined
       }
-      isOpen={isOpen}
-      onToggle={onToggle}
     >
       <div className="flex justify-center items-center gap-6">
         <button
@@ -51,7 +45,7 @@ const PositionSelection = ({
           오른쪽
         </button>
       </div>
-    </AccordionSection>
+    </CardSection>
   );
 };
 

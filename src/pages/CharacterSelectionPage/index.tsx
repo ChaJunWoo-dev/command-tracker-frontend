@@ -4,10 +4,10 @@ import CharacterSelection from "./components/CharacterSelection";
 import EmailInput from "./components/EmailInput";
 import PositionSelection from "./components/PositionSelection";
 import useSubmit from "./hooks/useSubmit";
-import useSectionToggle from "./hooks/useSectionToggle";
 import Button from "@/common/Button";
 import ErrorModal from "@/common/ErrorModal";
 import LoadingOverlay from "@/common/LoadingOverlay";
+import PageHeader from "@/common/PageHeader";
 import useVideoEditStore from "@/store/videoEditStore";
 import formatTime from "@/utils/formatTime";
 
@@ -27,21 +27,6 @@ const CharacterSelectionPage = () => {
   const setEmail = useVideoEditStore((state) => state.setEmail);
 
   const { error, isSubmitting, submit, clearError } = useSubmit();
-  const { openSections, open, toggle } = useSectionToggle({
-    position: !selectedPosition,
-    character: !!(selectedPosition && !selectedCharacter),
-    email: !!(selectedPosition && selectedCharacter),
-  });
-
-  const handlePositionSelect = (position: string) => {
-    setPosition(position);
-    open("character");
-  };
-
-  const handleCharacterSelect = (character: string) => {
-    setCharacter(character);
-    open("email");
-  };
 
   const handleSubmit = () => {
     if (!selectedPosition || !selectedCharacter || !trim || !videoFile) return;
@@ -67,64 +52,50 @@ const CharacterSelectionPage = () => {
 
   return (
     <>
-      <div className="w-full">
-        <div>
-          <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden">
-            <div className="px-6 py-8 border-b border-gray-700 text-center">
-              <h1 className="text-3xl font-bold text-white">캐릭터 선택</h1>
-              <p className="mt-2 text-gray-300">
-                분석할 캐릭터 정보를 선택해주세요
+      <div className="w-full space-y-4">
+        <PageHeader title="캐릭터 선택" description="분석할 캐릭터 정보를 선택해주세요">
+          {trim && (
+            <div className="mt-3 inline-block px-4 py-2 bg-indigo-900/50 border border-indigo-700 rounded-md">
+              <p className="text-sm font-medium text-indigo-200">
+                편집 구간:{" "}
+                <span className="font-bold">
+                  {formatTime(trim[0])} ~ {formatTime(trim[1])}
+                </span>
               </p>
-              {trim && (
-                <div className="mt-3 inline-block px-4 py-2 bg-indigo-900/50 border border-indigo-700 rounded-md">
-                  <p className="text-sm font-medium text-indigo-200">
-                    편집 구간:{" "}
-                    <span className="font-bold">
-                      {formatTime(trim[0])} ~ {formatTime(trim[1])}
-                    </span>
-                  </p>
-                </div>
-              )}
             </div>
+          )}
+        </PageHeader>
 
-            <PositionSelection
-              selectedPosition={selectedPosition}
-              onPositionSelect={handlePositionSelect}
-              isOpen={openSections.position}
-              onToggle={() => toggle("position")}
-            />
+        <PositionSelection
+          selectedPosition={selectedPosition}
+          onPositionSelect={setPosition}
+        />
 
-            <CharacterSelection
-              selectedCharacter={selectedCharacter}
-              onCharacterSelect={handleCharacterSelect}
-              isOpen={openSections.character}
-              onToggle={() => toggle("character")}
-            />
+        <CharacterSelection
+          selectedCharacter={selectedCharacter}
+          onCharacterSelect={setCharacter}
+        />
 
-            <EmailInput
-              email={email}
-              onEmailChange={setEmail}
-              isOpen={openSections.email}
-              onToggle={() => toggle("email")}
-            />
+        <EmailInput
+          email={email}
+          onEmailChange={setEmail}
+        />
 
-            <div className="px-6 py-6 bg-gray-800 flex justify-between">
-              <Button
-                variant="secondary"
-                onClick={() =>
-                  navigate("/video-edit", { state: { videoFile } })
-                }
-              >
-                다시 편집하기
-              </Button>
-              <Button
-                onClick={handleSubmit}
-                disabled={!selectedPosition || !selectedCharacter || !email}
-              >
-                제출하기
-              </Button>
-            </div>
-          </div>
+        <div className="flex justify-between">
+          <Button
+            variant="secondary"
+            onClick={() =>
+              navigate("/video-edit", { state: { videoFile } })
+            }
+          >
+            다시 편집하기
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            disabled={!selectedPosition || !selectedCharacter || !email}
+          >
+            제출하기
+          </Button>
         </div>
       </div>
 
