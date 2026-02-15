@@ -1,6 +1,5 @@
 import CardSection from "@/common/CardSection";
-import CharacterGrid from "@/common/character/CharacterGrid";
-import characters from "@/data/characters";
+import CharacterGrid from "@/common/character/CharacterListGrid";
 
 interface CharacterSelectionProps {
   selectedCharacter?: string;
@@ -17,7 +16,6 @@ const CharacterSelection = ({
       selectedValue={selectedCharacter}
     >
       <CharacterGrid
-        list={characters}
         selectable
         selectedCharacter={selectedCharacter}
         onCharacterSelect={onCharacterSelect}

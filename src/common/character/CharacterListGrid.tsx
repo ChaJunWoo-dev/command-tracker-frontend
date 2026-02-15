@@ -1,11 +1,6 @@
-interface Character {
-  name: string;
-  src: string;
-  isSupported?: boolean;
-}
+import characters from "@/data/characters";
 
-interface CharacterGridProps {
-  list: Character[];
+interface CharacterListGridGridProps {
   selectable?: boolean;
   selectedCharacter?: string;
   onCharacterSelect?: (name: string) => void;
@@ -13,14 +8,13 @@ interface CharacterGridProps {
 }
 
 const CharacterGrid = ({
-  list,
   selectable = false,
   selectedCharacter,
   onCharacterSelect,
   columns = "grid-cols-3 sm:grid-cols-4 md:grid-cols-6",
-}: CharacterGridProps) => (
+}: CharacterListGridGridProps) => (
   <div className={`grid ${columns} gap-3`}>
-    {list.map(({ name, src, isSupported }) => {
+    {characters.map(({ name, src, isSupported }) => {
       const isSelected = selectedCharacter === name;
       const Element = selectable ? "button" : "figure";
 

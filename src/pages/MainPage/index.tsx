@@ -3,11 +3,10 @@ import { useState } from "react";
 import { LuFilm, LuCircleCheck, LuUpload } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
-import CharacterGrid from "@/common/character/CharacterGrid";
+import CharacterGrid from "@/common/character/CharacterListGrid";
 import StepCard from "./components/StepCard";
 import VideoUploader from "./components/VideoUploader";
 import ErrorModal from "@/common/ErrorModal";
-import characters from "@/data/characters";
 
 const MainPage = () => {
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +50,9 @@ const MainPage = () => {
       )}
 
       <section className="w-full max-w-3xl mt-16">
-        <h2 className="text-xl font-semibold mb-6 text-white text-center">사용 방법</h2>
+        <h2 className="text-xl font-semibold mb-6 text-white text-center">
+          사용 방법
+        </h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <StepCard
             icon={<LuUpload className="h-10 w-10 text-indigo-500" />}
@@ -71,11 +72,13 @@ const MainPage = () => {
         </div>
 
         <section className="w-full max-w-3xl mt-20">
-          <h2 className="text-xl font-semibold mb-2 text-white text-center">SF6 캐릭터</h2>
+          <h2 className="text-xl font-semibold mb-2 text-white text-center">
+            SF6 캐릭터
+          </h2>
           <p className="text-gray-400 text-sm mb-4 text-center">
             현재 분석 가능한 캐릭터 목록입니다.
           </p>
-          <CharacterGrid list={characters} />
+          <CharacterGrid />
         </section>
       </section>
     </div>
